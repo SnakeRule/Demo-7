@@ -27,14 +27,12 @@ namespace Excercise_2
                 Console.Write("Give a Number (enter or not a number ends) : ");
                 text = Console.ReadLine();
 
-                integer = (int.TryParse(text, out i)); // Checking if the entered string can be parsed to an int
-                if (integer)
+                if (integer = (int.TryParse(text, out i))) // Checking if the entered string can be parsed to an int
                 {
                     outputFileInts.WriteLine(i); // If parsing was possible, int i is saved to file Someints.txt
                 }
                 else if (dubbles = (Double.TryParse(text, out d))) // Checking if the entered string can be parsed to a double
                 {
-                    if (dubbles)
                     {
                         outputFileDoubles.WriteLine(d); // If parsing was possible double d is saved to file Somedoubles.txt
                     }

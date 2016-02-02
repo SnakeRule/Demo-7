@@ -14,50 +14,103 @@ namespace Excercise_3
         // Creating a list for the shows and then the loaded shows
         public List<Show> shows;
         public List<Show> loadedShows;
+        // Creating the stream used to write and read the file
+        Stream tvShowsFileStream;
 
-        // Shows constructor creates the lists
+
+        /// <summary>
+        /// Shows constructor creates the lists
+        /// </summary>
         public Shows()
         {
             shows = new List<Show>();
             loadedShows = new List<Show>();
         }
 
-        // AddShow adds a show to the list
+
+        /// <summary>
+        /// AddShow adds a show to the list
+        /// </summary>
+        /// <param name="show">object containing the tv show data</param>
         public void AddShow(Show show)
         {
             shows.Add(show);
         }
 
-        // Writing the shows list to a file
+
+        /// <summary>
+        /// Writing the shows list to a file
+        /// </summary>
         public void WriteToFile()
         {
-            // Creating a Filestream for the writing the file
-            Stream tvShows = new FileStream("TvShows.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            try
+            {
+                // Creating a Filestream for the writing the file
+                tvShowsFileStream = new FileStream("tvShows.bin", FileMode.Create, FileAccess.Write, FileShare.None);
 
-            // Creating a BinaryFormatter object
-            IFormatter formatter = new BinaryFormatter();
+                // Creating a BinaryFormatter object
+                IFormatter formatter = new BinaryFormatter();
 
-            // shows list gets serialized to tvshows and ends up in TvShows.bin file
-            formatter.Serialize(tvShows, shows);
+                // shows list gets serialized to tvShowsFileStream and ends up in tvShowsFileStream.bin file
+                formatter.Serialize(tvShowsFileStream, shows);
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("File not found!");
+            }
 
-            // Closing the Filestream
-            tvShows.Close();
+            catch (Exception)
+            {
+                Console.WriteLine("Something really broke now!");
+            }
+
+            finally
+            {
+                // Closing the Filestream
+                if(tvShowsFileStream != null)
+                {
+                    tvShowsFileStream.Close();
+                }
+            }
         }
 
-        // Method for reading the file to a list
+
+        /// <summary>
+        /// Method for reading the file to a list
+        /// </summary>
         public void ReadFile()
         {
-            // Creating a filestream for reading the file
-            Stream tvShowsRead = new FileStream("TvShows.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+                try
+                {
+                    // Creating a filestream for reading the file
+                    tvShowsFileStream = new FileStream("tvShows.bin", FileMode.Open, FileAccess.Read, FileShare.None);
 
-            // Creating a BinaryFormatter object
-            IFormatter formatter = new BinaryFormatter();
+                    // Creating a BinaryFormatter object
+                    IFormatter formatter = new BinaryFormatter();
 
-            // The binary data gets Deserialized and put into the list loadedShows
-            loadedShows = (List<Show>) formatter.Deserialize(tvShowsRead);
+                    // The binary data gets Deserialized and put into the list loadedShows
+                    loadedShows = (List<Show>)formatter.Deserialize(tvShowsFileStream);
+                }
+                catch (FileNotFoundException)
+                {
+                    Console.WriteLine("File not found!");
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Something went really wrong!");
+                }
+                finally
+                {
+                    if (tvShowsFileStream != null)
+                    {
+                       tvShowsFileStream.Close();
+                    }
+                }
         }
 
-        // Method for printing the loaded data
+        /// <summary>
+        /// Method for printing the loaded data
+        /// </summary>
         public void PrintLoadedData()
         {
             shows.Clear(); // Clears the original shows list as proof that the data is being loaded from the loadedShows list

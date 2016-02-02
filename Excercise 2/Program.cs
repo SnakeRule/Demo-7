@@ -18,35 +18,38 @@ namespace Excercise_2
             bool dubbles;
             bool loop = true;
 
-            System.IO.StreamWriter outputFileInts = new System.IO.StreamWriter("Someints.txt");
-            System.IO.StreamWriter outputFileDoubles = new System.IO.StreamWriter("Somedoubles.txt");
+            // Opening streamwriters for two files
+            StreamWriter outputFileInts = new StreamWriter("Someints.txt"); // For saving integers
+            StreamWriter outputFileDoubles = new StreamWriter("Somedoubles.txt"); // For saving doubles
 
             do
             {
                 Console.Write("Give a Number (enter or not a number ends) : ");
                 text = Console.ReadLine();
-                integer = (int.TryParse(text, out i)) ;
+
+                integer = (int.TryParse(text, out i)); // Checking if the entered string can be parsed to an int
                 if (integer)
                 {
-                    outputFileInts.WriteLine(i);
-
+                    outputFileInts.WriteLine(i); // If parsing was possible, int i is saved to file Someints.txt
                 }
-                else if (dubbles = (Double.TryParse(text, out d)))
+                else if (dubbles = (Double.TryParse(text, out d))) // Checking if the entered string can be parsed to a double
                 {
                     if (dubbles)
                     {
-                        outputFileDoubles.WriteLine(d);
+                        outputFileDoubles.WriteLine(d); // If parsing was possible double d is saved to file Somedoubles.txt
                     }
                 }
                 else
-                    loop = false;
+                    loop = false; // If something that can't be parsed is entered, the loop breaks
 
-            } while(text.Length != 0 && loop == true);
+            } while(loop == true);
 
-            outputFileInts.Close();
+
+            // Closing the filestreams so they can be read soon after
+            outputFileInts.Close(); 
             outputFileDoubles.Close();
 
-            try
+            try // For Exception handling
             {
                 Console.WriteLine("Contents of Someints.txt :");
                 text = File.ReadAllText("Someints.txt");
@@ -58,9 +61,14 @@ namespace Excercise_2
                 Console.WriteLine(text);
             }
 
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("File not found");
+            }
+
             catch (Exception)
             {
-                Console.WriteLine("Halp");
+                Console.WriteLine("Well, you REALLY broke something now.");
             }
         }
     }

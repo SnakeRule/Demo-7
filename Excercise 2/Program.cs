@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace Excercise_2
             string text;
             bool integer;
             bool dubbles;
+            bool loop = true;
 
             System.IO.StreamWriter outputFileInts = new System.IO.StreamWriter("Someints.txt");
             System.IO.StreamWriter outputFileDoubles = new System.IO.StreamWriter("Somedoubles.txt");
@@ -27,19 +29,39 @@ namespace Excercise_2
                 if (integer)
                 {
                     outputFileInts.WriteLine(i);
-        
+
                 }
-                dubbles = (Double.TryParse(text, out d));
-                if (dubbles)
+                else if (dubbles = (Double.TryParse(text, out d)))
                 {
-                    outputFileDoubles.WriteLine(d);
+                    if (dubbles)
+                    {
+                        outputFileDoubles.WriteLine(d);
+                    }
                 }
+                else
+                    loop = false;
 
+            } while(text.Length != 0 && loop == true);
 
-            } while(text.Length != 0);
-
+            outputFileInts.Close();
             outputFileDoubles.Close();
-            outputFileDoubles.Close();
+
+            try
+            {
+                Console.WriteLine("Contents of Someints.txt :");
+                text = File.ReadAllText("Someints.txt");
+                Console.WriteLine(text);
+
+
+                Console.WriteLine("\nContents of Somedoubles.txt :");
+                text = File.ReadAllText("Somedoubles.txt");
+                Console.WriteLine(text);
+            }
+
+            catch (Exception)
+            {
+                Console.WriteLine("Halp");
+            }
         }
     }
 }
